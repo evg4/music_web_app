@@ -27,6 +27,7 @@ Put the different nouns in this table. Replace the example with your own nouns.
 | Record                | Properties          |
 | --------------------- | ------------------- |
 | album                 | title, release year, artist_id |
+| artist                | id, name
 
 Name of the table (always plural): `albums`
 

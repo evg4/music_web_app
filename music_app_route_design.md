@@ -16,6 +16,16 @@ path: /albums
 body params: none
 returns: all albums
 
+method: GET
+path: /artists
+params: none
+returns: all artists
+
+method: POST
+path: /artists
+body params: name, genre 
+returns: nothing 
+
 ```
 
 ## 2. Create Examples as Tests
@@ -65,5 +75,31 @@ def test_post_album_no_params(db_connection, web_client):
     response = web_client.post('/albums', data = {})
     assert response.status_code == 400
     assert response.data.decode('utf-8') == "Please enter a title, release year and artist id"
+
+def test_get_artists(db_connection, web_client):
+    db_connection.seed('seeds/artists_table.sql')
+    response = web_client.get('/artists')
+    assert reponse.status_code == 200
+    assert response.data.decode('utf-8') == "Pixies, ABBA, Taylor Swift, Nina Simone"
+
+def test_post_artist_Wild_nothing(db_connection, web_client):
+    db_connection.seed('seeds/artists_table.sql')
+    response_1 = web_client.post('/artists', data={'name':'Wild nothing', 'genre':'indie'})
+    assert response_1.status_code == 200
+    assert response_1.data == None #add decode ??
+    response_2 = web.client.get('/artists')
+    assert response_2.status_code == 200
+    assert response_2.data.decode(-utf-8) =="Pixies, ABBA, Taylor Swift, Nina Simone, Wild nothing"
+
+def test_post_artist_no_data(db_connection, web_client):
+    db_connection.seed('seeds/artists_table.sql')
+    response_1 = web_client.post('/artists', data={})
+    assert response_1.status_code == 400
+    assert response_1.data.decode('utf-8') == 'Please provide a name and genre.'
+    response_2 = web.client.get('/artists')
+    assert response_2.status_code == 200
+    assert response_2.data.decode(-utf-8) =="Pixies, ABBA, Taylor Swift, Nina Simone"
+
+
 ```
 
